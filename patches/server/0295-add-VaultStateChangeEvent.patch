@@ -1,0 +1,35 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Micha=C5=82=20Czopek?=
+ <44530932+Grabsky@users.noreply.github.com>
+Date: Mon, 2 Dec 2024 18:59:12 +0100
+Subject: [PATCH] add VaultStateChangeEvent
+
+
+diff --git a/src/main/java/net/minecraft/world/level/block/entity/vault/VaultBlockEntity.java b/src/main/java/net/minecraft/world/level/block/entity/vault/VaultBlockEntity.java
+index 4045ae665450f6e3f5630cb25cc53be850afd1a8..80b2130f7fd9b4a465a1d8148917cc91b784ce6f 100644
+--- a/src/main/java/net/minecraft/world/level/block/entity/vault/VaultBlockEntity.java
++++ b/src/main/java/net/minecraft/world/level/block/entity/vault/VaultBlockEntity.java
+@@ -44,6 +44,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
+ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+ import net.minecraft.world.phys.Vec3;
++import org.purpurmc.purpur.event.block.VaultStateChangeEvent;
+ import org.slf4j.Logger;
+ 
+ // CraftBukkit start
+@@ -347,8 +348,13 @@ public class VaultBlockEntity extends BlockEntity {
+             VaultState vaultstate = (VaultState) oldState.getValue(VaultBlock.STATE);
+             VaultState vaultstate1 = (VaultState) newState.getValue(VaultBlock.STATE);
+ 
+-            world.setBlock(pos, newState, 3);
+-            vaultstate.onTransition(world, pos, vaultstate1, config, sharedData, (Boolean) newState.getValue(VaultBlock.OMINOUS));
++            // Purpur start - VaultStateChangeEvent
++            final VaultStateChangeEvent event = new VaultStateChangeEvent(org.bukkit.craftbukkit.block.CraftBlock.at(world.getLevel(), pos), org.bukkit.block.data.type.Vault.State.valueOf(vaultstate.name()), org.bukkit.block.data.type.Vault.State.valueOf(vaultstate1.name()));
++            if (event.callEvent()) {
++                world.setBlock(pos, newState, 3);
++                vaultstate.onTransition(world, pos, vaultstate1, config, sharedData, (Boolean) newState.getValue(VaultBlock.OMINOUS));
++            }
++            // Purpur stop - VaultStateChangeEvent
+         }
+ 
+         static void cycleDisplayItemFromLootTable(ServerLevel world, VaultState state, VaultConfig config, VaultSharedData sharedData, BlockPos pos) {
