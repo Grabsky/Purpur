@@ -6,7 +6,7 @@ Subject: [PATCH] add VaultStateChangeEvent
 
 
 diff --git a/src/main/java/net/minecraft/world/level/block/entity/vault/VaultBlockEntity.java b/src/main/java/net/minecraft/world/level/block/entity/vault/VaultBlockEntity.java
-index 4045ae665450f6e3f5630cb25cc53be850afd1a8..91437b2c3edf615f120bb9ffd971fa001c9512de 100644
+index 4045ae665450f6e3f5630cb25cc53be850afd1a8..6a67340361440f7f287dbf1717dd60279d9af1b5 100644
 --- a/src/main/java/net/minecraft/world/level/block/entity/vault/VaultBlockEntity.java
 +++ b/src/main/java/net/minecraft/world/level/block/entity/vault/VaultBlockEntity.java
 @@ -347,8 +347,13 @@ public class VaultBlockEntity extends BlockEntity {
@@ -21,7 +21,7 @@ index 4045ae665450f6e3f5630cb25cc53be850afd1a8..91437b2c3edf615f120bb9ffd971fa00
 +                world.setBlock(pos, newState, 3);
 +                vaultstate.onTransition(world, pos, vaultstate1, config, sharedData, (Boolean) newState.getValue(VaultBlock.OMINOUS));
 +            }
-+            // Purpur stop - VaultStateChangeEvent
++            // Purpur end - VaultStateChangeEvent
          }
  
          static void cycleDisplayItemFromLootTable(ServerLevel world, VaultState state, VaultConfig config, VaultSharedData sharedData, BlockPos pos) {
