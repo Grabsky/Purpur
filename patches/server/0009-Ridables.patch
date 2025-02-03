@@ -22,10 +22,10 @@ index f58a94efafbc01d402cd03a108bb90f60930a316..21ea63da99c5b3e2e1ab9cc1049c903b
          super(x, y, z);
      }
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 05e49085d71e5e93a0033d3ca2a670981d6dfe75..69846993f5e5adef6ecf6c23f261b3dbabf6a193 100644
+index 2a24e011b8a1128396a0a092456050c4b88f8260..ff4d04092aa6322788d55d3c0253cb7f6f3cd493 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -1862,6 +1862,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -1863,6 +1863,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
              worldserver.hasEntityMoveEvent = io.papermc.paper.event.entity.EntityMoveEvent.getHandlerList().getRegisteredListeners().length > 0; // Paper - Add EntityMoveEvent
              net.minecraft.world.level.block.entity.HopperBlockEntity.skipHopperEvents = worldserver.paperConfig().hopper.disableMoveEvent || org.bukkit.event.inventory.InventoryMoveItemEvent.getHandlerList().getRegisteredListeners().length == 0; // Paper - Perf: Optimize Hoppers
              worldserver.updateLagCompensationTick(); // Paper - lag compensation
@@ -34,7 +34,7 @@ index 05e49085d71e5e93a0033d3ca2a670981d6dfe75..69846993f5e5adef6ecf6c23f261b3db
              gameprofilerfiller.push(() -> {
                  String s = String.valueOf(worldserver);
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index 8091e78e56c0e4ea880e6f88ec9c15ca5e67b9b0..1f49d018683fa19f498c8e68dab8a7ddde6cfad0 100644
+index 59f90878ec9f110d78bce998deb1dcd2830b0f08..498f0478bdb790bc3083d2cf5e81633054255fe2 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
 @@ -231,6 +231,7 @@ public class ServerLevel extends Level implements ServerEntityGetter, WorldGenLe
@@ -4757,7 +4757,7 @@ index 03e3cbe73119ca76417d4dd192e1560bdfc373ec..aa4160892b9ba2486806b5a54bc1465a
      public void setPersistentAngerTarget(@Nullable UUID angryAt) {
          this.persistentAngerTarget = angryAt;
 diff --git a/src/main/java/net/minecraft/world/entity/monster/creaking/Creaking.java b/src/main/java/net/minecraft/world/entity/monster/creaking/Creaking.java
-index 7b5f9284972b3a6bd8125891b23f73438e875c08..f935d475fd1aca407bde420e9ba8002002ea55f6 100644
+index 7b5f9284972b3a6bd8125891b23f73438e875c08..399590df6ef7ec30dddf0ecc78308a3659b2970b 100644
 --- a/src/main/java/net/minecraft/world/entity/monster/creaking/Creaking.java
 +++ b/src/main/java/net/minecraft/world/entity/monster/creaking/Creaking.java
 @@ -63,6 +63,29 @@ public class Creaking extends Monster {
@@ -4790,7 +4790,7 @@ index 7b5f9284972b3a6bd8125891b23f73438e875c08..f935d475fd1aca407bde420e9ba80020
      @Override
      protected BodyRotationControl createBodyControl() {
          return new Creaking.CreakingBodyRotationControl(this);
-@@ -296,7 +319,7 @@ public class Creaking extends Monster {
+@@ -296,28 +319,28 @@ public class Creaking extends Monster {
          }
      }
  
@@ -4799,7 +4799,14 @@ index 7b5f9284972b3a6bd8125891b23f73438e875c08..f935d475fd1aca407bde420e9ba80020
          public CreakingLookControl(final Creaking creaking) {
              super(creaking);
          }
-@@ -309,7 +332,7 @@ public class Creaking extends Monster {
+ 
+         @Override
+-        public void tick() {
++        public void vanillaTick() { // Purpur
+             if (Creaking.this.canMove()) {
+-                super.tick();
++                super.vanillaTick(); // Purpur
+             }
          }
      }
  
@@ -4808,11 +4815,21 @@ index 7b5f9284972b3a6bd8125891b23f73438e875c08..f935d475fd1aca407bde420e9ba80020
          public CreakingMoveControl(final Creaking creaking) {
              super(creaking);
          }
+ 
+         @Override
+-        public void tick() {
++        public void vanillaTick() { // Purpur
+             if (Creaking.this.canMove()) {
+-                super.tick();
++                super.vanillaTick(); // Purpur
+             }
+         }
+     }
 diff --git a/src/main/java/net/minecraft/world/entity/monster/hoglin/Hoglin.java b/src/main/java/net/minecraft/world/entity/monster/hoglin/Hoglin.java
-index 3f625cb9b1237ca8f782bca2f182dfe72853bd96..cde73e0bac71d1c37c3335f6a2294622f9453fbd 100644
+index 9c20651b74157582e60793ceba8adde2c354f2a8..e978aab6055f9365885e2412afdc44cb6c729af2 100644
 --- a/src/main/java/net/minecraft/world/entity/monster/hoglin/Hoglin.java
 +++ b/src/main/java/net/minecraft/world/entity/monster/hoglin/Hoglin.java
-@@ -92,6 +92,23 @@ public class Hoglin extends Animal implements Enemy, HoglinBase {
+@@ -71,6 +71,23 @@ public class Hoglin extends Animal implements Enemy, HoglinBase {
          this.xpReward = 5;
      }
  
@@ -4836,14 +4853,14 @@ index 3f625cb9b1237ca8f782bca2f182dfe72853bd96..cde73e0bac71d1c37c3335f6a2294622
      @VisibleForTesting
      public void setTimeInOverworld(int timeInOverworld) {
          this.timeInOverworld = timeInOverworld;
-@@ -161,7 +178,7 @@ public class Hoglin extends Animal implements Enemy, HoglinBase {
-     protected void customServerAiStep(ServerLevel world) {
-         ProfilerFiller profilerFiller = Profiler.get();
-         profilerFiller.push("hoglinBrain");
+@@ -144,7 +161,7 @@ public class Hoglin extends Animal implements Enemy, HoglinBase {
+         ProfilerFiller gameprofilerfiller = Profiler.get();
+ 
+         gameprofilerfiller.push("hoglinBrain");
 -        if (this.behaviorTick++ % this.activatedPriority == 0) // Pufferfish
 +        if ((getRider() == null || !this.isControllable()) && this.behaviorTick++ % this.activatedPriority == 0) // Pufferfish // Purpur - only use brain if no rider
          this.getBrain().tick(world, this);
-         profilerFiller.pop();
+         gameprofilerfiller.pop();
          HoglinAi.updateActivity(this);
 diff --git a/src/main/java/net/minecraft/world/entity/monster/piglin/Piglin.java b/src/main/java/net/minecraft/world/entity/monster/piglin/Piglin.java
 index d1870bf4c01c846a721480eb6611a67db9b98d02..9a3bc9c0ad1b0af3c8196a773dd93b069ca4e92c 100644
@@ -6206,15 +6223,17 @@ index 0000000000000000000000000000000000000000..dd219518150ca90f89ad238904fd4095
 +}
 diff --git a/src/main/java/org/purpurmc/purpur/controller/MoveControllerWASD.java b/src/main/java/org/purpurmc/purpur/controller/MoveControllerWASD.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..21fd6ea2a482758a3016e3bc2cdebe2d89267481
+index 0000000000000000000000000000000000000000..ad85c1ff6cd5d5ce2262bdb367ce9c8a5b707170
 --- /dev/null
 +++ b/src/main/java/org/purpurmc/purpur/controller/MoveControllerWASD.java
-@@ -0,0 +1,89 @@
+@@ -0,0 +1,92 @@
 +package org.purpurmc.purpur.controller;
 +
++import net.minecraft.server.level.ServerPlayer;
 +import net.minecraft.world.entity.Mob;
 +import net.minecraft.world.entity.ai.attributes.Attributes;
 +import net.minecraft.world.entity.ai.control.MoveControl;
++import net.minecraft.world.entity.player.Input;
 +import net.minecraft.world.entity.player.Player;
 +import org.purpurmc.purpur.event.entity.RidableSpacebarEvent;
 +
@@ -6251,8 +6270,9 @@ index 0000000000000000000000000000000000000000..21fd6ea2a482758a3016e3bc2cdebe2d
 +    }
 +
 +    public void purpurTick(Player rider) {
-+        float forward = rider.getForwardMot() * 0.5F;
-+        float strafe = rider.getStrafeMot() * 0.25F;
++        Input lastClientInput = ((ServerPlayer) rider).getLastClientInput();
++        float forward = (lastClientInput.forward() == lastClientInput.backward() ? 0.0F : lastClientInput.forward() ? 1.0F : -1.0F) * 0.5F;
++        float strafe = (lastClientInput.left() == lastClientInput.right() ? 0.0F : lastClientInput.left() ? 1.0F : -1.0F) * 0.25F;
 +
 +        if (forward <= 0.0F) {
 +            forward *= 0.5F;
