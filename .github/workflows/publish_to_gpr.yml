@@ -2,7 +2,7 @@ name: Publish to GPR
 
 on:
   push:
-    branches: ["ver/1.21.4"]
+    branches: ["ver/**"]
 
 permissions:
   contents: write
@@ -19,11 +19,16 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
-      # Publishing
-      - name: publish
+      # Applying Patches
+      - name: apply-patches
         uses: gradle/gradle-build-action@v3
         with:
-          arguments: applyPaperPatches publishPackagesPublicationToGprRepository --no-daemon
+          arguments: applyAllPatches
+      # Publishing
+      - name: publish-to-gpr
+        uses: gradle/gradle-build-action@v3
+        with:
+          arguments: publishPackagesPublicationToGprRepository
         env:
           # GitHub Packages
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
