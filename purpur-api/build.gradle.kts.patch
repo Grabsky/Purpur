@@ -28,6 +28,29 @@
          }
      }
  }
+@@ -131,6 +_,22 @@
+ }
+ 
+ configure<PublishingExtension> {
++    // GH Packages Publication
++    repositories {
++        maven {
++            name = "gpr"
++            url = uri("https://maven.pkg.github.com/Grabsky/Purpur")
++            credentials {
++                username = System.getenv("GITHUB_ACTOR")
++                password = System.getenv("GITHUB_TOKEN")
++            }
++        }
++    }
++    publications {
++        register<MavenPublication>("packages") {
++            from (components["java"])
++        }
++    }
+     publications.create<MavenPublication>("maven") {
+         // For Brigadier API
+         outgoingVariants.forEach {
 @@ -168,8 +_,10 @@
  val services = objects.newInstance<Services>()
  
