@@ -23,7 +23,7 @@ jobs:
       - name: publish
         uses: gradle/gradle-build-action@v3
         with:
-          arguments: publishPackagesPublicationToGprRepository --no-daemon
+          arguments: applyPaperPatches publishPackagesPublicationToGprRepository --no-daemon
         env:
           # GitHub Packages
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
