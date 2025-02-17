@@ -1,0 +1,18 @@
+--- a/net/minecraft/world/level/block/entity/vault/VaultBlockEntity.java
++++ b/net/minecraft/world/level/block/entity/vault/VaultBlockEntity.java
+@@ -288,8 +_,13 @@
+         static void setVaultState(ServerLevel level, BlockPos pos, BlockState oldState, BlockState newState, VaultConfig config, VaultSharedData sharedData) {
+             VaultState vaultState = oldState.getValue(VaultBlock.STATE);
+             VaultState vaultState1 = newState.getValue(VaultBlock.STATE);
+-            level.setBlock(pos, newState, 3);
+-            vaultState.onTransition(level, pos, vaultState1, config, sharedData, newState.getValue(VaultBlock.OMINOUS));
++            // PURPUR START - VaultStateChangeEvent
++            final org.purpurmc.purpur.event.VaultStateChangeEvent event = new org.purpurmc.purpur.event.VaultStateChangeEvent(org.bukkit.craftbukkit.block.CraftBlock.at(level, pos), org.bukkit.block.data.type.Vault.State.valueOf(vaultState.name()), org.bukkit.block.data.type.Vault.State.valueOf(vaultState1.name()));
++            if (event.callEvent()) {
++                level.setBlock(pos, newState, 3);
++                vaultState.onTransition(level, pos, vaultState1, config, sharedData, newState.getValue(VaultBlock.OMINOUS));
++            }
++            // PURPUR END - VaultStateChangeEvent
+         }
+ 
+         static void cycleDisplayItemFromLootTable(ServerLevel level, VaultState state, VaultConfig config, VaultSharedData sharedData, BlockPos pos) {
